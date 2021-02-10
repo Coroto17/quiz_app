@@ -73,6 +73,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
+## ADDING CHAKRA UI.
+
+I'm working with chakra UI for the first time. [Docs](https://chakra-ui.com/docs/getting-started)
+
+* To install: `npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion`
+* To Setup, we wrap our App with `ChakraProvider`
+
 ## Backend Django.
 
 Steps to prepare the backend:
