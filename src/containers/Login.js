@@ -1,82 +1,106 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment,
-} from "semantic-ui-react";
+import React from "react";
 import { connect } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
 import { authLogin } from "../store/actions/auth";
+import { Form, Input, Button, Alert, Row, Col } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const LoginForm = (props) => {
-  const [values, setValues] = useState({
-    username: "",
-    password: "",
-  });
+  const [form] = Form.useForm();
 
-  const handleChange = (event) => {
-    setValues({ [event.target.name]: event.target.value });
+  const validateMessages = {
+    required: '${label} is required!',
   };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const onFinish = (values) => {    
     const { username, password } = values;
     props.login(username, password);
   };
 
-  return props.token ? (
-    <Redirect to="/" />
-  ) : (
-    <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="teal" textAlign="center">
-          Log-in to your account
-        </Header>
-        {props.error && <p>{props.error.message}</p>}
+  let error = [];
+  if (props.error) {
+    let object = props.error.response.data
+    for (let item in object) {
+      error.push(<li>{object[item]}</li>)
+    }
+  }
 
-        <>
-          <Form size="large" onSubmit={handleSubmit}>
-            <Segment stacked>
-              <Form.Input
-                onChange={handleChange}
-                value={values.username}
-                name="username"
-                fluid
-                icon="user"
-                iconPosition="left"
-                placeholder="Username"
+  if (props.token) {
+    return <Redirect to="/" />;
+  }
+  return (
+    <div style={{height: "calc(100vh - 110px)", marginTop: "40px", display: "grid", verticalAlign:"middle", textAlign:"center"}}>
+      <Row justify="center" align="bottom"><h1 style={{textAlign:"center"}}>Login</h1></Row>
+      <Row justify="center" align="middle">
+        <Col span={12}>
+          <Form
+            form={form}
+            name="control-hooks"
+            onFinish={onFinish}
+            validateMessages={validateMessages}
+            style={{borderRadius: "5px", border: "2px solid #DDD", padding: "10px"}}
+          >
+            {props.error && (
+              <Alert
+                message="There were errors with the form"
+                description={(<ul>{error}</ul>)}
+                type="error"
+                showIcon
+                banner
+                closable
               />
-              <Form.Input
-                onChange={handleChange}
-                fluid
-                value={values.password}
-                name="password"
-                icon="lock"
-                iconPosition="left"
-                placeholder="Password"
-                type="password"
-              />
+            )}
 
+            <Form.Item
+              name="username"
+              label="Username"
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined />} placeholder="Enter Username" />
+            </Form.Item>
+
+            <Form.Item
+              name="password"
+              label="Password"
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined />} placeholder="Enter Password" />
+            </Form.Item>
+
+            <Form.Item>
               <Button
-                color="teal"
-                fluid
-                size="large"
-                loading={props.loading}
-                disabled={props.loading}
+                type="primary"
+                htmlType="submit"
               >
                 Login
               </Button>
-            </Segment>
+            </Form.Item>
           </Form>
-          <Message>
-            New to us? <NavLink to="/signup">Sign Up</NavLink>
-          </Message>
-        </>
-      </Grid.Column>
-    </Grid>
+        </Col>
+      </Row>
+      <Row justify="center">
+        <Col span={12}>
+          <Alert
+            message="New to this Website?"
+            style={{textAlign: "center"}}
+            description={<NavLink to="/signup">Signup</NavLink>}
+            type="info"
+            showIcon
+          />
+        </Col>
+      </Row>
+    </div>
   );
 };
 

@@ -1,111 +1,180 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment,
-} from "semantic-ui-react";
+import React from "react";
 import { connect } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
 import { authSignup } from "../store/actions/auth";
+import { Form, Input, Button, Select, Alert, Row, Col } from "antd";
+import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
 
 const RegistrationForm = (props) => {
-  const [values, setValues] = useState({
-    username: "",
-    email: "",
-    password1: "",
-    password2: "",
-  });
+  const [form] = Form.useForm();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const { username, email, password1, password2 } = values;
-    props.signup(username, email, password1, password2);
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+    },
   };
 
-  const handleChange = (event) => {
-    setValues({
-      [event.target.name]: event.target.value,
-    });
+  const onFinish = (values) => {
+    console.log(values);
+    let is_student = false;
+    const { username, email, password1, password2, userType } = values;
+    if (userType === "student") is_student = true;
+    props.signup(username, email, password1, password2, is_student);
   };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("error", errorInfo);
+  };
+
+  const compareToFirstPassword = (rule, value, callback) => {
+    if (value && value !== form.getFieldValue('password1')) {
+      callback('The passwords must match!');
+    } else {
+      callback();
+    }
+  }
+
+  let error = [];
+  if (props.error) {
+    let object = props.error.response.data
+    for (let item in object) {
+      error.push(<li>{object[item]}</li>)
+    }
+  }
 
   if (props.token) {
     return <Redirect to="/" />;
   }
-
   return (
-    <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
-      <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="teal" textAlign="center">
-          Signup to your account
-        </Header>
-        {props.error && <p>{props.error.message}</p>}
-        <>
-          <Form size="large" onSubmit={handleSubmit}>
-            <Segment stacked>
-              <Form.Input
-                onChange={handleChange}
-                value={values.username}
-                name="username"
-                fluid
-                icon="user"
-                iconPosition="left"
-                placeholder="Username"
+    <div style={{height: "calc(100vh - 110px)", marginTop: "40px", textAlign: "center", display: "grid", verticalAlign:"middle"}}>
+      <Row justify="center" align="bottom"><h1 style={{textAlign:"center"}}>Signup</h1></Row>
+      <Row justify="center">
+        <Col span={12}>
+          <Form
+            form={form}
+            onFinish={onFinish}
+            validateMessages={validateMessages}
+            onFinishFailed={onFinishFailed}
+            style={{borderRadius: "5px", border: "2px solid #DDD", padding: "10px"}}
+
+          >
+            {props.error && (
+              <Alert
+                message="There were errors with the form"
+                description={(<ul>{error}</ul>)}
+                type="error"
+                showIcon
+                banner
+                closable
               />
-              <Form.Input
-                onChange={handleChange}
-                value={values.email}
-                name="email"
-                fluid
-                icon="mail"
-                iconPosition="left"
-                placeholder="E-mail address"
-              />
-              <Form.Input
-                onChange={handleChange}
-                fluid
-                value={values.password1}
-                name="password1"
-                icon="lock"
-                iconPosition="left"
-                placeholder="Password"
-                type="password"
-              />
-              <Form.Input
-                onChange={handleChange}
-                fluid
-                value={values.password2}
-                name="password2"
-                icon="lock"
-                iconPosition="left"
-                placeholder="Confirm password"
-                type="password"
-              />
+            )}
+
+            <Form.Item
+              name="username"
+              label="Username"
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined />} placeholder="Enter a Username" />
+            </Form.Item>
+
+            <Form.Item
+              name="email"
+              label="Email"
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                },
+              ]}
+            >
+              <Input prefix={<MailOutlined />} placeholder="Enter Email" />
+            </Form.Item>
+
+            <Form.Item
+              name="password1"
+              label="Password"
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined />} placeholder="Enter a password" />
+            </Form.Item>
+
+            <Form.Item
+              name="password2"
+              label="Confirm Password"
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+              rules={[
+                {
+                  required: true, 
+                },
+                {
+                  validator: compareToFirstPassword
+                }
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined />} placeholder="Confirm password" />
+            </Form.Item>
+
+            <Form.Item
+              name="userType"
+              label="Type of User"
+              labelCol={{span: 24}}
+              wrapperCol={{span: 24}}
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Select
+                placeholder="Select a type of user"
+                //onChange={onUserTypeChange}
+              >
+                <Option value="student">Student</Option>
+                <Option value="teacher">Teacher</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item>
               <Button
-                color="teal"
-                fluid
-                size="large"
-                loading={props.loading}
-                disabled={props.loading}
+                type="primary"
+                htmlType="submit"
               >
                 Signup
               </Button>
-            </Segment>
+            </Form.Item>
           </Form>
-          <Message>
-            Already have an account?{" "}
-            <NavLink
-              to="/login"
-              activeStyle={{ color: "teal", fontWeight: "bold" }}
-            >
-              Login
-            </NavLink>
-          </Message>
-        </>
-      </Grid.Column>
-    </Grid>
+        </Col>
+      </Row>
+      <Row justify="center">
+        <Col span={12}>
+          <Alert
+              message="Already have an Account?"
+              style={{textAlign: "center"}}
+              description={<NavLink to="/login">Login</NavLink>}
+              type="info"
+              showIcon
+            />
+        </Col>
+      </Row>
+    </div>
   );
 };
 
@@ -119,8 +188,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signup: (username, email, password1, password2) =>
-      dispatch(authSignup(username, email, password1, password2)),
+    signup: (username, email, password1, password2, is_student) =>
+      dispatch(authSignup(username, email, password1, password2, is_student)),
   };
 };
 

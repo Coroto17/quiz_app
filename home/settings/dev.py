@@ -2,7 +2,7 @@
 
 from .base import *
 
-ALLOWED_HOSTS += ["localhost"]
+ALLOWED_HOSTS += ["localhost", "127.0.0.1"]
 DEBUG = True
 
 WSGI_APPLICATION = "home.wsgi.dev.application"
@@ -14,4 +14,4 @@ DATABASES = {
     }
 }
 
-CORS_ORIGIN_WHITELIST = ["http://localhost:3033"]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3033", "http://localhost:8000"]

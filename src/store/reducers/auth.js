@@ -3,6 +3,9 @@ import { updateObject } from "../utils";
 
 const initialState = {
   token: null,
+  username: null,
+  is_student: null,
+  is_teacher: null,
   error: null,
   loading: false
 };
@@ -16,7 +19,10 @@ const authStart = (state, action) => {
 
 const authSuccess = (state, action) => {
   return updateObject(state, {
-    token: action.token,
+    token: action.user.token,
+    username: action.user.username,
+    is_student: action.user.is_student,
+    is_teacher: action.user.is_teacher,
     error: null,
     loading: false
   });
@@ -31,7 +37,12 @@ const authFail = (state, action) => {
 
 const authLogout = (state, action) => {
   return updateObject(state, {
-    token: null
+    token: null,
+    username: null,
+    is_student: null,
+    is_teacher: null,
+    error: null,
+    loading: false
   });
 };
 

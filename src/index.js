@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { createStore, compose, applyMiddleware, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import './index.css';
 import App from './App';
 import authReducer from "./store/reducers/auth";
+import 'antd/dist/antd.css';
 import reportWebVitals from './reportWebVitals';
 
 
