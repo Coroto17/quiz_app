@@ -8,12 +8,12 @@ import "./Layout.css";
 const { Header, Content, Footer } = Layout;
 
 const CustomLayout = (props) => {
-
+  
   return (
     <Layout className="layout">
       <Header>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={"1"}>
           <Menu.Item key="1"><Link to="/">Home</Link></Menu.Item>
           {props.isAuthenticated ? (
             <Menu.Item key="2" onClick={() => props.logout()}>Logout</Menu.Item>

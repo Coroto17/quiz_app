@@ -20,7 +20,7 @@ const LoginForm = (props) => {
   if (props.error) {
     let object = props.error.response.data
     for (let item in object) {
-      error.push(<li>{object[item]}</li>)
+      error.push(<li key={item}>{object[item]}</li>)
     }
   }
 
