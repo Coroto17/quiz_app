@@ -49,10 +49,10 @@ const RegistrationForm = (props) => {
     return <Redirect to="/" />;
   }
   return (
-    <div style={{height: "calc(100vh - 110px)", marginTop: "40px", textAlign: "center", display: "grid", verticalAlign:"middle"}}>
+    <div>
       <Row justify="center" align="bottom"><h1 style={{textAlign:"center"}}>Signup</h1></Row>
       <Row justify="center">
-        <Col span={12}>
+        <Col>
           <Form
             form={form}
             onFinish={onFinish}
@@ -164,10 +164,10 @@ const RegistrationForm = (props) => {
         </Col>
       </Row>
       <Row justify="center">
-        <Col span={12}>
+        <Col>
           <Alert
               message="Already have an Account?"
-              style={{textAlign: "center"}}
+              style={{padding: "15px"}}
               description={<NavLink to="/login">Login</NavLink>}
               type="info"
               showIcon

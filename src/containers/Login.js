@@ -28,10 +28,10 @@ const LoginForm = (props) => {
     return <Redirect to="/" />;
   }
   return (
-    <div style={{height: "calc(100vh - 110px)", marginTop: "40px", display: "grid", verticalAlign:"middle", textAlign:"center"}}>
+    <div style={{textAlign:"center"}}>
       <Row justify="center" align="bottom"><h1 style={{textAlign:"center"}}>Login</h1></Row>
       <Row justify="center" align="middle">
-        <Col span={12}>
+        <Col>
           <Form
             form={form}
             name="control-hooks"
@@ -90,7 +90,7 @@ const LoginForm = (props) => {
         </Col>
       </Row>
       <Row justify="center">
-        <Col span={12}>
+        <Col>
           <Alert
             message="New to this Website?"
             style={{textAlign: "center"}}

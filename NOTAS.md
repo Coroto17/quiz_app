@@ -18,18 +18,18 @@ Con esta info, haremos nuestra primera migración y migraremos.
 
 4. Vamos a proceder a crear un superusuario, pero debemos hacerlo desde el shell de django porque le pusimos campos extra a `AbstractUser`. Para crearlo ejecutamos `python manage.spy shell` y lo hacemos con código, de la siguiente manera:
 ```
-user = User()
-user.username = "ecc2"
-user.password = "una password que no sea común"
-user.is_student = False
-user.is_teacher = True
-user.is_superuser = True
-user.is_staff = True
-user.save()
+user = User.objects.create_user(
+username = "ecc2",
+password = "una password que no sea común",
+is_student = False,
+is_teacher = True,
+is_superuser = True,
+is_staff = True
+)
 ```
 `CORS_ORIGINAL_WHITELIST`: recordar agregar a `http://localhost:8000` en este setting para poder hacer peticiones al backend.
 
-5. Una vez con nuestro usuario ya creado, desde el frontend no podemos hacer login (error 400) porque no hemoc configurado la parte de rest-auth para que funcione con nuestro esquema de usuarios.
+5. Una vez con nuestro usuario ya creado, desde el frontend no podemos hacer login (error 400) porque no hemos configurado la parte de rest-auth para que funcione con nuestro esquema de usuarios.
 
 Nos vamos a ir a la documentación de dj-rest-auth para ver como podemos configurar serializers personalizados para cada endpoint. [url](https://dj-rest-auth.readthedocs.io/en/latest/configuration.html).
 
@@ -56,4 +56,14 @@ Durante este paso seguimos teniendo error 500, así que necesitamos escribir y m
 
 Nos logeamos en el admin site para verificar que los campos esten llenos de manera correcta (Hay que registrar la app en admin site).
 
-7. Ahora vamos a probar login.
+7. Ahora vamos a cambiar la manera de ver a los Users en el admin site. Vamos a personalizar desde el archivo `admin.py`.
+
+En el `admin.py` lo que hicimos fue cambiar la manera de ver, crear y editar usuarios en el admin site.
+
+8. Ahora vamos a crear una nueva vista en el backend para las tareas (assignments) que fueron calificadas. Para ello vamos a modificar el archivo `views.py` dentro de la app `users`. Vamos a crear viewsets para no escribir tanto código.
+
+Una vez creado el viewset en `views.py` vamos a irnos a `urls.py` a crear la ruta.
+
+Una vez creada la ruta allí, vamos al `urls.py` del proyecto y agregamos la ruta que va a preceder a la que acabamos de agregar.
+
+9. Una vez confirmado que lo anterior funciona, vamos a crear una manera de acceder a los datos desde el frontend.
