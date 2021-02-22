@@ -7,6 +7,8 @@ urlpatterns = [
     path("rest-auth/", include("dj_rest_auth.urls")),
     path("rest-auth/registration/", include("dj_rest_auth.registration.urls")),
     path("admin/", admin.site.urls),
+    path("assignments/", include("api.assignments.urls")),
+    path("graded_assignments/", include("api.graded_assignments.urls")),
     path("users/", include("users.urls")),
     re_path(
         r"^service-worker.js",

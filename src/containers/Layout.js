@@ -51,10 +51,10 @@ const CustomLayout = (props) => {
           )}
         </Menu>
       </Header>
-      <Content>
-        <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
+      <Content style={{padding: "0 24px"}}>
+        <Breadcrumb style={{ margin: "16px" }}>
+          <Breadcrumb.Item><Link to="/">Home</Link></Breadcrumb.Item>
+          <Breadcrumb.Item><Link to={`/profiles/${props.userId}`}>Profile</Link></Breadcrumb.Item>
           <Breadcrumb.Item>App</Breadcrumb.Item>
         </Breadcrumb>
         <div className="site-layout-content">{props.children}</div>
@@ -64,10 +64,14 @@ const CustomLayout = (props) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  userId: state.auth.userId
+})
+
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(actions.logout()),
   };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(CustomLayout));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CustomLayout));

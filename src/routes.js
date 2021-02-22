@@ -3,18 +3,26 @@ import { Route, Switch } from "react-router-dom";
 
 import Login from "./containers/Login.js";
 import Signup from "./containers/Signup";
-import HomepageLayout from "./containers/Home";
+import Profile from "./containers/Profile";
+import AssignmentList from "./containers/AssignmentList";
+import AssignmentDetail from "./containers/AssignmentDetail";
 
 const BaseRouter = () => (
   <Switch>
-    <Route path="/login">
+    <Route exact path="/">
+      <AssignmentList />
+    </Route>
+    <Route exact path="/assignments/:id">
+      <AssignmentDetail />
+    </Route>
+    <Route exact path="/login">
       <Login />
     </Route>
-    <Route path="/signup">
+    <Route exact path="/signup">
       <Signup />
     </Route>
-    <Route exact path="/">
-      <HomepageLayout />
+    <Route path="/profiles/:id">
+      <Profile />
     </Route>
   </Switch>
 );

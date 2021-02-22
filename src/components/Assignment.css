@@ -1,0 +1,7 @@
+li.ant-list-item {
+  color: #1890ff;
+}
+
+li.ant-list-item:hover {
+  color: coral;
+}

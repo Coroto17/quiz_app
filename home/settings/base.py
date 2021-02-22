@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "rest_framework",
     "rest_framework.authtoken",
+    "api",
     "users",
 ]
 
@@ -71,10 +72,16 @@ SITE_ID = 1
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+        #"rest_framework.authentication.SessionAuthentication",
+        #"rest_framework.authentication.BasicAuthentication",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        #"rest_framework.renderers.BrowsableAPIRenderer",
     ],
 }
 ACCOUNT_UNIQUE_EMAIL = True
@@ -92,8 +99,9 @@ AUTHENTICATION_BACKENDS = [
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "users.serializers.UserSerializer",
+    "TOKEN_SERIALIZER": "users.serializers.TokenSerializer",
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    "REGISTER_SERIALIZER": "users.serializers.CustomRegisterSerializer"
+    "REGISTER_SERIALIZER": "users.serializers.CustomRegisterSerializer",
 }

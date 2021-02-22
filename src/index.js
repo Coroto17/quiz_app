@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import App from './App';
 import authReducer from "./store/reducers/auth";
+import assignmentReducer from "./store/reducers/assignments";
 import 'antd/dist/antd.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -12,7 +13,8 @@ import reportWebVitals from './reportWebVitals';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  assignments: assignmentReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

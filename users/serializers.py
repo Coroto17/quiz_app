@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
+from rest_framework.authtoken.models import Token
 
 from .models import User
 
@@ -36,3 +37,24 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.save()
         adapter.save_user(request, user, self)
         return user
+
+
+class TokenSerializer(serializers.ModelSerializer):
+    user_data = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Token
+        fields = ["key", "user", "user_data"]
+
+    def get_user_data(self, obj):
+        serializer_data = UserSerializer(
+            obj.user
+        ).data
+        username = serializer_data.get("username")
+        is_student = serializer_data.get("is_student")
+        is_teacher = serializer_data.get("is_teacher")
+        return {
+            "username": username,
+            "is_student": is_student,
+            "is_teacher": is_teacher
+        }
